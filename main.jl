@@ -172,14 +172,14 @@ end
 #UNIDADES
 # long = mt, fuerza = kgf
 width = 3.0
-height = 12.0
+height = 1.0
 spacing = 0.5
 element = "SGCMQI"
 thickness = 0.14
 elastic_2d_material = Material(1, 325000000.0, 0.25, 1800, 0)
 project = Project(width, height, spacing, element, thickness, elastic_2d_material)
 
-
+run(`just create`)
 fname = "script/mesh_test.sp"
 open(fname, "w") do f
     for n in project.nodes
@@ -190,7 +190,7 @@ open(fname, "w") do f
     end
     write(f, write_fmt(project.materials))
     write(f, write_fmt(project.constrains))
-    write(f, "cload 1 0 2000 1 17\n")
+    write(f, "cload 1 0 2000 1 3\n")
     write(f, "step static 1\n")
     write(f, "set ini_step_size 1\n")
     write(f, "set fixed_step_size true\n")
@@ -202,7 +202,6 @@ open(fname, "w") do f
     write(f, "exit")
 end
 
-run(`suanpan -nu -nc -f ./script/mesh_test.sp`)
 run(`just`)
 
 vtk_file = VTKFile("./results/R1-U-000002.vtu")
